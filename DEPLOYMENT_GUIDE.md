@@ -1,280 +1,189 @@
-# Deployment Guide: AI-Powered Study Companion
+# Render Full-Stack Deployment Guide
 
-## Overview
+This guide walks you through deploying both frontend and backend together on Render as a single service.
 
-This guide covers deploying both the frontend (React/Vite) and backend (Express.js) to production.
+## Architecture
+
+- **Single Node.js Service** running Express backend
+- **Frontend** built as static files and served by Express
+- **API Routes** available at `/api/*`
+- **Single Domain** for both frontend and backend
 
 ## Prerequisites
 
-- Node.js 18+ installed
-- Git repository set up
-- Supabase account and project
-- Google Gemini API key
-- Hosting accounts (Vercel/Netlify for frontend, Railway/Heroku for backend)
+1. GitHub account with your code pushed
+2. Render account (https://render.com)
+3. All environment variables ready:
+   - Supabase URL and Anon Key
+   - Google API Keys (1-3)
 
-## Backend Deployment
+## Deployment Steps
 
-### 1. Prepare Backend
+### Step 1: Prepare Your Repository
+
+Ensure all changes are committed and pushed to GitHub:
 
 ```bash
-cd backend
-npm install
-npm run build
+git add .
+git commit -m "Prepare for Render deployment"
+git push origin main
 ```
 
-### 2. Set Environment Variables
+### Step 2: Create Render Account
 
-Create `.env` in backend root:
+1. Go to https://render.com
+2. Sign up with GitHub
+3. Authorize Render to access your repositories
 
-```env
+### Step 3: Deploy Using Blueprint (Recommended)
+
+1. In Render dashboard, click **"New +"** → **"Blueprint"**
+2. Select your GitHub repository
+3. Render will auto-detect `render.yaml`
+4. Click **"Apply"**
+5. Render will create the service automatically
+
+### Step 4: Add Environment Variables
+
+After the service is created:
+
+1. Go to your service dashboard
+2. Click **"Environment"** tab
+3. Add these variables:
+
+```
 SUPABASE_URL=your_supabase_url
-SUPABASE_SERVICE_KEY=your_service_key
-GOOGLE_API_KEY=your_gemini_api_key
-PORT=3001
-NODE_ENV=production
-CORS_ORIGIN=https://your-frontend-domain.com
-```
-
-### 3. Deploy to Railway
-
-```bash
-# Install Railway CLI
-npm install -g @railway/cli
-
-# Login
-railway login
-
-# Initialize project
-railway init
-
-# Deploy
-railway up
-```
-
-### 4. Deploy to Heroku
-
-```bash
-# Install Heroku CLI
-npm install -g heroku
-
-# Login
-heroku login
-
-# Create app
-heroku create your-app-name
-
-# Set environment variables
-heroku config:set SUPABASE_URL=your_url
-heroku config:set SUPABASE_SERVICE_KEY=your_key
-heroku config:set GOOGLE_API_KEY=your_key
-heroku config:set CORS_ORIGIN=https://your-frontend.com
-
-# Deploy
-git push heroku main
-```
-
-## Frontend Deployment
-
-### 1. Prepare Frontend
-
-```bash
-npm install
-npm run build
-```
-
-### 2. Set Environment Variables
-
-Create `.env.production`:
-
-```env
-VITE_API_URL=https://your-backend-domain.com/api
+SUPABASE_SERVICE_KEY=your_supabase_service_key
+GOOGLE_API_KEY=your_google_api_key
 VITE_SUPABASE_URL=your_supabase_url
-VITE_SUPABASE_ANON_KEY=your_anon_key
-VITE_GOOGLE_API_KEY=your_gemini_api_key
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+VITE_GOOGLE_API_KEY=your_google_api_key
+VITE_GOOGLE_API_KEY_2=your_google_api_key_2
+VITE_GOOGLE_API_KEY_3=your_google_api_key_3
 ```
 
-### 3. Deploy to Vercel
+**Note:** `VITE_API_URL=/api` is already set in render.yaml
+
+### Step 5: Deploy
+
+1. Click **"Deploy"** button
+2. Wait for build to complete (5-10 minutes)
+3. You'll get a URL like: `https://learnoverse.onrender.com`
+
+### Step 6: Verify Deployment
+
+1. Visit your Render URL
+2. Check browser console for errors
+3. Test API calls work properly
+4. Visit `/health` endpoint to verify backend is running
+
+## Build Process
+
+The deployment runs these commands in order:
 
 ```bash
-# Install Vercel CLI
-npm install -g vercel
+# Install root dependencies
+npm install
 
-# Deploy
-vercel
+# Build frontend (creates dist/ folder)
+npm run build
 
-# Set environment variables in Vercel dashboard
+# Build backend
+cd backend && npm install && npm run build
 ```
 
-### 4. Deploy to Netlify
+Then starts the server:
 
 ```bash
-# Install Netlify CLI
-npm install -g netlify-cli
-
-# Deploy
-netlify deploy --prod --dir=dist
+cd backend && npm start
 ```
 
-## Database Setup
+## How It Works
 
-### Create Supabase Tables
-
-Run these SQL commands in Supabase SQL Editor:
-
-```sql
--- Documents table
-CREATE TABLE documents (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  name TEXT NOT NULL,
-  file_path TEXT NOT NULL,
-  char_count INTEGER NOT NULL,
-  extracted_text TEXT NOT NULL,
-  created_at TIMESTAMP DEFAULT NOW(),
-  updated_at TIMESTAMP DEFAULT NOW()
-);
-
--- Generated content cache
-CREATE TABLE generated_content (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  document_id UUID REFERENCES documents(id) ON DELETE CASCADE,
-  type TEXT NOT NULL CHECK (type IN ('mindmap', 'flashcards', 'summary')),
-  content TEXT NOT NULL,
-  metadata JSONB DEFAULT '{}',
-  created_at TIMESTAMP DEFAULT NOW(),
-  expires_at TIMESTAMP
-);
-
--- Chat messages
-CREATE TABLE chat_messages (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  document_id UUID REFERENCES documents(id) ON DELETE CASCADE,
-  role TEXT NOT NULL CHECK (role IN ('user', 'assistant')),
-  content TEXT NOT NULL,
-  created_at TIMESTAMP DEFAULT NOW()
-);
-
--- Create indexes
-CREATE INDEX idx_documents_created_at ON documents(created_at);
-CREATE INDEX idx_generated_content_document_id ON generated_content(document_id);
-CREATE INDEX idx_generated_content_type ON generated_content(type);
-CREATE INDEX idx_chat_messages_document_id ON chat_messages(document_id);
-```
-
-## Monitoring & Logging
-
-### Backend Monitoring
-
-- Use Railway/Heroku dashboard for logs
-- Set up error tracking with Sentry:
-
-```bash
-npm install @sentry/node
-```
-
-### Frontend Monitoring
-
-- Use Vercel/Netlify analytics
-- Set up error tracking with Sentry:
-
-```bash
-npm install @sentry/react
-```
-
-## Performance Optimization
-
-### Backend
-
-- Enable gzip compression
-- Use connection pooling for database
-- Implement rate limiting
-- Cache frequently accessed data
-
-### Frontend
-
-- Enable code splitting
-- Optimize images
-- Use service workers for offline support
-- Enable HTTP/2 push
-
-## Security Checklist
-
-- [ ] API keys stored in environment variables
-- [ ] CORS properly configured
-- [ ] HTTPS enabled
-- [ ] Rate limiting implemented
-- [ ] Input validation on all endpoints
-- [ ] SQL injection prevention (using parameterized queries)
-- [ ] XSS protection enabled
-- [ ] CSRF tokens implemented
-- [ ] Sensitive data not logged
-- [ ] Regular security updates
+1. **Frontend Build**: Vite builds React app to `dist/` folder
+2. **Backend Build**: TypeScript compiles to `backend/dist/`
+3. **Server Start**: Express starts and:
+   - Serves API routes at `/api/*`
+   - Serves static frontend files from `dist/`
+   - Falls back to `index.html` for SPA routing
 
 ## Troubleshooting
 
-### Backend Issues
+### Build Fails
 
-**Port already in use:**
+Check the build logs in Render dashboard:
+1. Go to service → "Logs" tab
+2. Look for error messages
+3. Common issues:
+   - Missing environment variables
+   - TypeScript compilation errors
+   - Missing dependencies
+
+### API Calls Fail
+
+1. Check browser Network tab
+2. Verify API URL is `/api` (relative path)
+3. Check backend logs for errors
+4. Verify environment variables are set
+
+### Cold Starts
+
+Free tier services spin down after 15 minutes of inactivity:
+- First request takes 30-60 seconds
+- Upgrade to Starter plan ($7/month) to avoid this
+
+### CORS Issues
+
+CORS is configured to allow:
+- `http://localhost:5173` (local dev)
+- `http://localhost:3000` (local dev)
+- Any origin set in `CORS_ORIGIN` env var
+
+## Local Development
+
+For local development, use:
+
 ```bash
-lsof -i :3001
-kill -9 <PID>
+# Terminal 1: Frontend
+npm run dev
+
+# Terminal 2: Backend
+cd backend && npm run dev
 ```
 
-**Database connection failed:**
-- Check Supabase URL and keys
-- Verify network access
-- Check firewall rules
+Frontend will be at `http://localhost:5173`
+Backend will be at `http://localhost:3001`
 
-### Frontend Issues
+## Automatic Deployments
 
-**API calls failing:**
-- Check CORS configuration
-- Verify API URL in environment variables
-- Check network tab in browser DevTools
+Every push to `main` branch automatically triggers a new deployment.
 
-**Build errors:**
-- Clear node_modules and reinstall
-- Check Node.js version compatibility
-- Review build logs
+To disable auto-deploy:
+1. Go to service settings
+2. Disable "Auto-Deploy"
 
-## Rollback Procedure
+## Monitoring
 
-### Railway/Heroku
+Monitor your deployment:
+1. Check service logs in Render dashboard
+2. Visit `/health` endpoint for backend status
+3. Monitor resource usage in service metrics
 
-```bash
-# View deployment history
-heroku releases
+## Scaling
 
-# Rollback to previous version
-heroku rollback
-```
-
-### Vercel/Netlify
-
-- Use dashboard to select previous deployment
-- Click "Redeploy" on desired version
-
-## Maintenance
-
-### Regular Tasks
-
-- Monitor error logs
-- Update dependencies monthly
-- Review and optimize database queries
-- Check API rate limits
-- Backup database regularly
-
-### Scaling
-
-- Increase backend resources if CPU/memory high
-- Enable database read replicas
-- Use CDN for static assets
-- Implement caching layer (Redis)
+To upgrade from free tier:
+1. Go to service settings
+2. Click "Change Plan"
+3. Select Starter or higher
+4. Benefits:
+   - No cold starts
+   - More resources
+   - Better performance
 
 ## Support
 
-For issues or questions:
-1. Check logs in hosting dashboard
-2. Review error messages in browser console
-3. Check backend API responses
-4. Verify environment variables
-5. Contact hosting provider support
+For issues:
+1. Check Render documentation: https://render.com/docs
+2. Review build logs in dashboard
+3. Check environment variables are correct
+4. Verify GitHub repository is connected
