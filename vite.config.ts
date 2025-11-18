@@ -24,10 +24,42 @@ export default defineConfig({
     chunkSizeWarningLimit: 1000,
     rollupOptions: {
       output: {
-        manualChunks: {
-          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-          'ui-vendor': ['@radix-ui/react-accordion', '@radix-ui/react-alert-dialog', '@radix-ui/react-aspect-ratio', '@radix-ui/react-avatar', '@radix-ui/react-checkbox', '@radix-ui/react-collapsible', '@radix-ui/react-context-menu', '@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu', '@radix-ui/react-hover-card', '@radix-ui/react-label', '@radix-ui/react-menubar', '@radix-ui/react-navigation-menu', '@radix-ui/react-popover', '@radix-ui/react-progress', '@radix-ui/react-radio-group', '@radix-ui/react-scroll-area', '@radix-ui/react-select', '@radix-ui/react-separator', '@radix-ui/react-slider', '@radix-ui/react-slot', '@radix-ui/react-switch', '@radix-ui/react-tabs', '@radix-ui/react-toast', '@radix-ui/react-toggle', '@radix-ui/react-toggle-group', '@radix-ui/react-tooltip'],
-          'ai-vendor': ['@google/generative-ai', '@langchain/community', '@langchain/core', '@langchain/google-genai', 'langchain'],
+        manualChunks: (id) => {
+          // React and React ecosystem
+          if (id.includes('node_modules/react') || id.includes('node_modules/react-dom') || id.includes('node_modules/react-router')) {
+            return 'react-vendor';
+          }
+          
+          // Radix UI components
+          if (id.includes('node_modules/@radix-ui')) {
+            return 'ui-vendor';
+          }
+          
+          // PDF processing
+          if (id.includes('node_modules/pdfjs-dist')) {
+            return 'pdf-vendor';
+          }
+          
+          // Google AI and Langchain
+          if (id.includes('node_modules/@google/generative-ai') || 
+              id.includes('node_modules/@langchain') ||
+              id.includes('node_modules/langchain')) {
+            return 'ai-vendor';
+          }
+          
+          // State management and utilities
+          if (id.includes('node_modules/zustand') || 
+              id.includes('node_modules/zod') ||
+              id.includes('node_modules/date-fns') ||
+              id.includes('node_modules/clsx') ||
+              id.includes('node_modules/tailwind-merge')) {
+            return 'utils-vendor';
+          }
+          
+          // Other node_modules
+          if (id.includes('node_modules')) {
+            return 'vendor';
+          }
         },
       },
     },
