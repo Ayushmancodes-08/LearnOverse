@@ -1,0 +1,123 @@
+/* Mindmap Viewer Enhancements */
+
+/* Smooth transitions for mindmap nodes */
+.markmap-node {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.markmap-node:hover {
+  filter: brightness(1.1);
+}
+
+/* Enhanced link styling */
+.markmap-link {
+  transition: stroke-width 0.2s ease, opacity 0.2s ease;
+}
+
+.markmap-link:hover {
+  stroke-width: 3px !important;
+  opacity: 1 !important;
+}
+
+/* Node text styling */
+.markmap-foreign {
+  transition: transform 0.2s ease;
+}
+
+.markmap-node:hover .markmap-foreign {
+  transform: scale(1.05);
+}
+
+/* Circle node styling */
+.markmap-circle {
+  transition: r 0.2s ease, fill 0.2s ease;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.markmap-node:hover .markmap-circle {
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+}
+
+/* Fullscreen mode enhancements */
+.mindmap-fullscreen {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* Control panel animations */
+.mindmap-controls {
+  animation: slideInFromRight 0.3s ease-out;
+}
+
+@keyframes slideInFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Tooltip styling for better UX */
+.markmap-tooltip {
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+/* Loading state animation */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.mindmap-loading {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Smooth zoom transitions */
+svg.mindmap-canvas {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Node text readability */
+.markmap-foreign div {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-weight: 500;
+  line-height: 1.4;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive text sizing */
+@media (max-width: 768px) {
+  .markmap-foreign div {
+    font-size: 12px;
+  }
+}
+
+/* Accessibility: Focus states */
+.markmap-node:focus {
+  outline: 2px solid #8b5cf6;
+  outline-offset: 2px;
+}
+
+/* Print styles */
+@media print {
+  .mindmap-controls {
+    display: none;
+  }
+  
+  svg.mindmap-canvas {
+    width: 100%;
+    height: auto;
+  }
+}

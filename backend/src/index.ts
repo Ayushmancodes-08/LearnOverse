@@ -1,0 +1,47 @@
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import { initializeSupabase } from './config/supabase.js';
+import { documentRoutes } from './routes/documents.js';
+import { chatRoutes } from './routes/chat.js';
+import { mindmapRoutes } from './routes/mindmap.js';
+import { flashcardRoutes } from './routes/flashcards.js';
+import { summaryRoutes } from './routes/summary.js';
+import { errorHandler } from './middleware/errorHandler.js';
+
+dotenv.config();
+
+const app = express();
+const PORT = process.env.PORT || 3001;
+
+// Middleware
+app.use(cors({
+  origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
+  credentials: true,
+}));
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
+
+// Initialize Supabase
+initializeSupabase();
+
+// Routes
+app.use('/api/documents', documentRoutes);
+app.use('/api/chat', chatRoutes);
+app.use('/api/mindmap', mindmapRoutes);
+app.use('/api/flashcards', flashcardRoutes);
+app.use('/api/summary', summaryRoutes);
+
+// Health check
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
+// Error handling
+app.use(errorHandler);
+
+// Start server
+app.listen(PORT, () => {
+  console.log(`✅ Server running on http://localhost:${PORT}`);
+  console.log(`📝 Environment: ${process.env.NODE_ENV || 'development'}`);
+});
