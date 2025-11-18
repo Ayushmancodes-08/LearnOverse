@@ -3,10 +3,5 @@ services:
     name: learnoverse
     env: node
     plan: free
-    buildCommand: npm install && npm run build && cd backend && npm install && npm run build
+    buildCommand: npm ci && npm run build && cd backend && npm install && npm run build
     startCommand: cd backend && npm start
-    envVars:
-      - key: NODE_ENV
-        value: production
-      - key: NPM_FLAGS
-        value: --include=dev
