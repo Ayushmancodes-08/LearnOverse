@@ -39,7 +39,7 @@ describe('Flashcard Service', () => {
 
   it('should validate flashcard structure', () => {
     const validCard = { question: 'What is X?', answer: 'X is...' };
-    const invalidCard = { question: 'What is X?' }; // Missing answer
+    const invalidCard = { question: 'What is X?' } as any; // Missing answer
 
     expect(validCard.question).toBeDefined();
     expect(validCard.answer).toBeDefined();

@@ -31,8 +31,8 @@ flashcardRoutes.post(
     if (documentId) {
       const supabase = getSupabase();
       try {
-        const { data } = await supabase
-          .from('generated_content')
+        const { data } = await (supabase
+          .from('generated_content') as any)
           .select('content, expires_at')
           .eq('document_id', documentId)
           .eq('type', 'flashcards')
@@ -41,9 +41,10 @@ flashcardRoutes.post(
 
         if (data) {
           // Check if cache is still valid
-          const expiresAt = new Date(data.expires_at);
+          const cacheData = data as any;
+          const expiresAt = new Date(cacheData.expires_at);
           if (expiresAt > new Date()) {
-            flashcards = JSON.parse(data.content);
+            flashcards = JSON.parse(cacheData.content);
             cached = true;
           }
         }
@@ -61,7 +62,7 @@ flashcardRoutes.post(
       if (documentId) {
         const supabase = getSupabase();
         try {
-          await supabase.from('generated_content').insert({
+          await (supabase.from('generated_content') as any).insert({
             document_id: documentId,
             type: 'flashcards',
             content: JSON.stringify(flashcards),

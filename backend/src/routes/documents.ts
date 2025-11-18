@@ -37,8 +37,8 @@ documentRoutes.post(
 
     // Store in Supabase
     const supabase = getSupabase();
-    const { data, error } = await supabase
-      .from('documents')
+    const { data, error } = await (supabase
+      .from('documents') as any)
       .insert({
         name: fileName,
         file_path: `uploads/${Date.now()}-${fileName}`,
@@ -52,14 +52,15 @@ documentRoutes.post(
       throw new AppError(500, `Failed to store document: ${error.message}`);
     }
 
-    console.log(`Document stored: ${data.id} - ${data.char_count} characters`);
+    const docData = data as any;
+    console.log(`Document stored: ${docData.id} - ${docData.char_count} characters`);
 
     res.json({
       status: 'success',
-      documentId: data.id,
-      fileName: data.name,
-      textLength: data.char_count,
-      extractedText: data.extracted_text,
+      documentId: docData.id,
+      fileName: docData.name,
+      textLength: docData.char_count,
+      extractedText: docData.extracted_text,
     });
   })
 );

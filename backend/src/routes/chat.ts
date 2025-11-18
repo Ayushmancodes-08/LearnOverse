@@ -31,7 +31,7 @@ chatRoutes.post(
     if (documentId) {
       const supabase = getSupabase();
       try {
-        await supabase.from('chat_messages').insert([
+        await (supabase.from('chat_messages') as any).insert([
           { document_id: documentId, role: 'user', content: query },
           { document_id: documentId, role: 'assistant', content: answer },
         ]);

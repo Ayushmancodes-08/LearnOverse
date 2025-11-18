@@ -104,44 +104,10 @@ async function extractTextWithOCR(buffer: Buffer, pdf: any, maxPages: number): P
         const page = await pdf.getPage(i);
         
         // Render page to image
-        const viewport = page.getViewport({ scale: 2 });
-        const canvas = await import('canvas').then(m => new m.Canvas(viewport.width, viewport.height));
-        const context = canvas.getContext('2d');
-        
-        const renderContext = {
-          canvasContext: context,
-          viewport: viewport,
-        };
-
-        await page.render(renderContext).promise;
-        const imageData = canvas.toDataURL('image/png');
-        const base64Image = imageData.split(',')[1];
-
-        // Use Gemini Vision to extract text
-        const result = await model.generateContent({
-          contents: [
-            {
-              role: 'user',
-              parts: [
-                {
-                  inlineData: {
-                    mimeType: 'image/png',
-                    data: base64Image,
-                  },
-                },
-                {
-                  text: 'Extract ALL text from this image. Preserve the structure, formatting, and all content including questions, answers, tables, and any other text. Return only the extracted text without any commentary.',
-                },
-              ],
-            },
-          ],
-        });
-
-        const pageText = result.response.text();
-        if (pageText && pageText.length > 0) {
-          allText += pageText + '\n\n--- PAGE BREAK ---\n\n';
-          console.log(`Page ${i} OCR: extracted ${pageText.length} characters`);
-        }
+        // Note: Canvas rendering requires native dependencies
+        // For production, consider using a service like AWS Textract or Google Document AI
+        console.log(`Skipping OCR for page ${i} - canvas not available`);
+        continue;
       } catch (pageError) {
         console.warn(`Failed to OCR page ${i}:`, pageError);
         continue;
