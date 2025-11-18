@@ -51,15 +51,22 @@ After the service is created:
 2. Click **"Environment"** tab
 3. Add these variables:
 
+**Backend Variables:**
 ```
 SUPABASE_URL=your_supabase_url
 SUPABASE_SERVICE_KEY=your_supabase_service_key
 GOOGLE_API_KEY=your_google_api_key
+```
+
+**Frontend Variables (VITE_*):**
+```
 VITE_SUPABASE_URL=your_supabase_url
 VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 VITE_GOOGLE_API_KEY=your_google_api_key
 VITE_GOOGLE_API_KEY_2=your_google_api_key_2
 VITE_GOOGLE_API_KEY_3=your_google_api_key_3
+VITE_GOOGLE_DRIVE_API_KEY=your_google_drive_api_key
+VITE_DRIVE_MAIN_FOLDER_ID=your_drive_folder_id
 ```
 
 **Note:** `VITE_API_URL=/api` is already set in render.yaml
