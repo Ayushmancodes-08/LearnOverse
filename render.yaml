@@ -3,5 +3,5 @@ services:
     name: learnoverse
     env: node
     plan: free
-    buildCommand: npm ci && npm run build && cd backend && npm install && npm run build
-    startCommand: cd backend && npm start
+    buildCommand: npm ci && npm run build && cd backend && npm ci && npm run build
+    startCommand: node backend/dist/index.js
