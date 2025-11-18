@@ -33,8 +33,17 @@ app.use(cors({
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
+// Health check (before Supabase init so it always works)
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
 // Initialize Supabase
-initializeSupabase();
+try {
+  initializeSupabase();
+} catch (error) {
+  console.error('Failed to initialize Supabase:', error);
+}
 
 // API Routes
 app.use('/api/documents', documentRoutes);
@@ -42,11 +51,6 @@ app.use('/api/chat', chatRoutes);
 app.use('/api/mindmap', mindmapRoutes);
 app.use('/api/flashcards', flashcardRoutes);
 app.use('/api/summary', summaryRoutes);
-
-// Health check
-app.get('/health', (req, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString() });
-});
 
 // Serve static frontend files in production
 if (process.env.NODE_ENV === 'production') {

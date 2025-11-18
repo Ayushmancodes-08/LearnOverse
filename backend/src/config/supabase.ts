@@ -7,7 +7,9 @@ export function initializeSupabase() {
   const serviceKey = process.env.SUPABASE_SERVICE_KEY;
 
   if (!url || !serviceKey) {
-    throw new Error('Missing Supabase environment variables (SUPABASE_URL, SUPABASE_SERVICE_KEY)');
+    console.warn('⚠️  Missing Supabase environment variables (SUPABASE_URL, SUPABASE_SERVICE_KEY)');
+    console.warn('⚠️  Supabase features will not be available');
+    return null;
   }
 
   supabase = createClient(url, serviceKey);

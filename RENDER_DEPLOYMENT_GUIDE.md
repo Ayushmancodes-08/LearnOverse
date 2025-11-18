@@ -162,6 +162,13 @@ NODE_ENV=production
 CORS_ORIGIN=https://your-app.onrender.com
 ```
 
+**Important Notes:**
+- All `VITE_*` variables are for the frontend and must start with `VITE_`
+- Backend variables do NOT start with `VITE_`
+- `CORS_ORIGIN` should be set to your Render URL (e.g., `https://learnoverse.onrender.com`)
+- If Supabase variables are missing, the app will still start but database features won't work
+- You can update environment variables anytime and redeploy without rebuilding
+
 ### Step 3.5: Deploy
 
 1. Click **"Create Web Service"** button
@@ -252,6 +259,38 @@ If you want manual deployments:
 
 ## Troubleshooting
 
+### Build Fails with "vite: not found"
+
+**Error:** `sh: 1: vite: not found`
+
+**Solution:**
+1. Ensure `vite` is in `devDependencies` in `package.json`
+2. Commit `package-lock.json` to GitHub
+3. The `render.yaml` file should have:
+   ```yaml
+   buildCommand: npm ci && npm run build && cd backend && npm ci && npm run build
+   ```
+4. The `.npmrc` file should contain: `production=false`
+5. Push changes and redeploy
+
+### Deployment Times Out
+
+**Error:** `==> Timed Out` during deployment
+
+**Solution:**
+1. Check that environment variables are set in Render dashboard:
+   - `SUPABASE_URL`
+   - `SUPABASE_SERVICE_KEY`
+   - `GOOGLE_API_KEY`
+   - `CORS_ORIGIN` (set to your Render URL after first deploy)
+2. Verify the health check endpoint works:
+   - Visit `https://your-app.onrender.com/health`
+   - Should return: `{"status":"ok","timestamp":"..."}`
+3. Check Render logs for errors:
+   - Go to Render dashboard → Logs tab
+   - Look for error messages during startup
+4. If Supabase variables are missing, the app will still start but database features won't work
+
 ### Build Fails
 
 **Error: "npm: command not found"**
@@ -270,30 +309,36 @@ If you want manual deployments:
 
 **Error: "Cannot connect to database"**
 - Solution: Verify `SUPABASE_URL` and `SUPABASE_SERVICE_KEY` are correct
+- Note: App will still start without these, but database features won't work
 
 ### API Calls Fail
 
 **Error: "404 Not Found"**
 - Solution: Check `/api/health` endpoint first
 - Verify backend is running
+- Check that API routes are properly registered
 
 **Error: "CORS error"**
-- Solution: Update `CORS_ORIGIN` environment variable
+- Solution: Update `CORS_ORIGIN` environment variable to your Render URL
 - Redeploy after updating
+- Example: `https://learnoverse.onrender.com`
 
 **Error: "API key invalid"**
 - Solution: Verify `GOOGLE_API_KEY` is correct
 - Check it's not expired
+- Verify all required API keys are set
 
 ### Frontend Won't Load
 
 **Error: "Blank page"**
-- Solution: Check browser console (F12)
-- Check Render logs
+- Solution: Check browser console (F12) for errors
+- Check Render logs for backend errors
+- Verify `VITE_API_URL=/api` is set
 
 **Error: "404 on root"**
-- Solution: Verify build succeeded
+- Solution: Verify build succeeded (check build logs)
 - Check `dist/` folder was created
+- Verify frontend files are being served
 
 ## Environment Variables Reference
 
