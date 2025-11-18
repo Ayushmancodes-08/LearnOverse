@@ -10,16 +10,14 @@ services:
         value: production
       - key: PORT
         value: 3001
-      - key: VITE_API_URL
-        value: /api
-      # Backend Environment Variables
       - key: SUPABASE_URL
         sync: false
       - key: SUPABASE_SERVICE_KEY
         sync: false
       - key: GOOGLE_API_KEY
         sync: false
-      # Frontend Environment Variables (VITE_*)
+      - key: VITE_API_URL
+        value: /api
       - key: VITE_SUPABASE_URL
         sync: false
       - key: VITE_SUPABASE_ANON_KEY
@@ -29,8 +27,4 @@ services:
       - key: VITE_GOOGLE_API_KEY_2
         sync: false
       - key: VITE_GOOGLE_API_KEY_3
-        sync: false
-      - key: VITE_GOOGLE_DRIVE_API_KEY
-        sync: false
-      - key: VITE_DRIVE_MAIN_FOLDER_ID
         sync: false
