@@ -6,15 +6,5 @@
     "api/**/*.ts": {
       "runtime": "nodejs20.x"
     }
-  },
-  "env": {
-    "VITE_API_URL": "@vite_api_url",
-    "VITE_SUPABASE_URL": "@vite_supabase_url",
-    "VITE_SUPABASE_ANON_KEY": "@vite_supabase_anon_key",
-    "VITE_GOOGLE_API_KEY": "@vite_google_api_key",
-    "VITE_GOOGLE_API_KEY_2": "@vite_google_api_key_2",
-    "VITE_GOOGLE_API_KEY_3": "@vite_google_api_key_3",
-    "VITE_GOOGLE_DRIVE_API_KEY": "@vite_google_drive_api_key",
-    "VITE_DRIVE_MAIN_FOLDER_ID": "@vite_drive_main_folder_id"
   }
 }
