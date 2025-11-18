@@ -1,205 +1,246 @@
-# 🤯 Mentis - AI-Powered Study Companion
+# LearnOverse - AI-Powered Study Companion
 
-Transform your study materials into interactive mindmaps, summaries, and have intelligent conversations with your documents using Google Gemini AI.
+A full-stack application with separate frontend and backend folders for better organization and scalability.
 
-## ✨ Features
+## Project Structure
 
-- 📚 **Multi-Format Upload** - PDF, TXT, Markdown support
-- 🧠 **AI Mindmaps** - Auto-generate interactive concept maps
-- 📝 **Smart Summaries** - Instant document summarization
-- 💬 **Document Chat** - Ask questions about your materials
-- 🔄 **API Key Rotation** - Automatic failover for reliability
-- ⚡ **Fast & Efficient** - Optimized with latest Gemini 2.5 Flash
-
-## 🚀 Quick Start
-
-### 1. Get API Key
-Visit [Google AI Studio](https://aistudio.google.com/app/apikey) and create an API key
-
-### 2. Setup
-```bash
-# Clone and install
-npm install
-
-# Configure
-cp .env.example .env.local
-# Edit .env.local and add your API key
+```
+learnoverse/
+├── frontend/          # React + Vite frontend application
+│   ├── src/          # React components, pages, hooks
+│   ├── public/       # Static assets
+│   ├── package.json  # Frontend dependencies
+│   └── vite.config.ts
+├── backend/          # Express.js backend API
+│   ├── src/          # API routes, services, middleware
+│   ├── package.json  # Backend dependencies
+│   └── tsconfig.json
+└── README.md         # This file
 ```
 
-### 3. Run
+## Quick Start
+
+### Prerequisites
+- Node.js 18+ and npm
+
+### Installation
+
+Install dependencies for all packages:
+
+```bash
+npm run install:all
+```
+
+Or install individually:
+
+```bash
+# Frontend
+cd frontend && npm install
+
+# Backend
+cd backend && npm install
+```
+
+### Development
+
+Run both frontend and backend concurrently:
+
 ```bash
 npm run dev
 ```
 
-Open http://localhost:8080 in your browser
+Or run them separately:
 
-## 📖 Documentation
+```bash
+# Terminal 1 - Frontend (runs on http://localhost:5173)
+npm run frontend:dev
 
-- **[QUICK_START.md](./QUICK_START.md)** - 30-second setup guide
-- **[SETUP_INSTRUCTIONS.md](./SETUP_INSTRUCTIONS.md)** - Detailed setup & troubleshooting
-- **[MODEL_UPDATES.md](./MODEL_UPDATES.md)** - AI model information
-- **[BUG_FIX_REPORT.md](./BUG_FIX_REPORT.md)** - Technical details
-- **[SOLUTION_SUMMARY.md](./SOLUTION_SUMMARY.md)** - Architecture overview
+# Terminal 2 - Backend (runs on http://localhost:3001)
+npm run backend:dev
+```
 
-## 🛠️ Tech Stack
+### Building
+
+Build both frontend and backend:
+
+```bash
+npm run build
+```
+
+Or build individually:
+
+```bash
+npm run frontend:build
+npm run backend:build
+```
+
+## Frontend
+
+Located in `frontend/` folder.
+
+**Tech Stack:**
+- React 18
+- TypeScript
+- Vite
+- Tailwind CSS
+- Radix UI
+
+**Commands:**
+```bash
+cd frontend
+
+npm run dev          # Start development server
+npm run build        # Build for production
+npm run preview      # Preview production build
+npm run lint         # Run ESLint
+npm run test         # Run tests
+npm run test:watch   # Run tests in watch mode
+```
+
+**Environment Variables:**
+Create `frontend/.env.local`:
+```
+VITE_API_URL=http://localhost:3001/api
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_supabase_key
+VITE_GOOGLE_API_KEY=your_google_api_key
+```
+
+## Backend
+
+Located in `backend/` folder.
+
+**Tech Stack:**
+- Express.js
+- TypeScript
+- Node.js
+- Supabase
+
+**Commands:**
+```bash
+cd backend
+
+npm run dev          # Start development server with hot reload
+npm run build        # Build TypeScript to JavaScript
+npm start            # Run compiled backend
+npm run test         # Run tests
+```
+
+**Environment Variables:**
+Create `backend/.env`:
+```
+PORT=3001
+NODE_ENV=development
+SUPABASE_URL=your_supabase_url
+SUPABASE_SERVICE_KEY=your_supabase_service_key
+GOOGLE_API_KEY=your_google_api_key
+CORS_ORIGIN=http://localhost:5173
+```
+
+## API Endpoints
+
+### Health Check
+```
+GET /health
+```
+
+### Documents
+```
+POST /api/documents/upload
+GET /api/documents
+DELETE /api/documents/:id
+```
+
+### Chat
+```
+POST /api/chat
+GET /api/chat/:documentId
+```
+
+### Mindmap
+```
+POST /api/mindmap/generate
+GET /api/mindmap/:documentId
+```
+
+### Flashcards
+```
+POST /api/flashcards/generate
+GET /api/flashcards/:documentId
+```
+
+### Summary
+```
+POST /api/summary/generate
+GET /api/summary/:documentId
+```
+
+## Development Workflow
+
+1. **Frontend Development:**
+   - Make changes in `frontend/src/`
+   - Vite will hot-reload automatically
+   - Run `npm run lint` to check code quality
+
+2. **Backend Development:**
+   - Make changes in `backend/src/`
+   - Use `npm run dev` for hot reload with tsx
+   - Changes will automatically restart the server
+
+3. **Testing:**
+   - Frontend: `cd frontend && npm run test`
+   - Backend: `cd backend && npm run test`
+
+## Deployment
 
 ### Frontend
-- **React 18** - UI framework
-- **TypeScript** - Type safety
-- **Vite** - Fast build tool
-- **Tailwind CSS** - Styling
-- **Zustand** - State management
-- **Radix UI** - Component library
+- Build: `npm run frontend:build`
+- Output: `frontend/dist/`
+- Deploy to: Vercel, Netlify, or any static host
 
-### AI & APIs
-- **Gemini 2.5 Flash** - Chat model
-- **Text Embedding 004** - Embeddings
-- **Simple RAG** - Document retrieval
-- **LangChain** - AI orchestration
+### Backend
+- Build: `npm run backend:build`
+- Output: `backend/dist/`
+- Deploy to: Render, Railway, Heroku, or any Node.js host
 
-### Backend (Python)
-- **Streamlit** - Web framework
-- **LangChain** - RAG system
-- **Chroma** - Vector database
-- **PyPDF2** - PDF processing
+## Troubleshooting
 
-## 📦 Build & Deploy
+### Port Already in Use
+If port 3001 or 5173 is already in use:
 
-### Development
+**Frontend:**
 ```bash
-npm run dev      # Start dev server
-npm run lint     # Check code quality
+cd frontend && npm run dev -- --port 5174
 ```
 
-### Production
+**Backend:**
 ```bash
-npm run build    # Build for production
-npm run preview  # Preview build
+cd backend && PORT=3002 npm run dev
 ```
 
-## 🔐 Security
-
-- ✅ API keys never exposed in code
-- ✅ Environment variables properly configured
-- ✅ `.env.local` excluded from git
-- ✅ Secure error handling
-
-## 🐛 Troubleshooting
-
-### "No API keys found"
-→ Add `VITE_GOOGLE_API_KEY` to `.env.local`
-
-### Port already in use
-→ Dev server uses next available port (check console)
-
-### PDF extraction fails
-→ Use text-based PDFs (not scanned images)
-
-### Rate limit errors
-→ Add backup keys: `VITE_GOOGLE_API_KEY_2`, `VITE_GOOGLE_API_KEY_3`
-
-See [SETUP_INSTRUCTIONS.md](./SETUP_INSTRUCTIONS.md) for more help.
-
-## 📊 Project Structure
-
-```
-src/
-├── components/          # React components
-│   ├── ui/             # Radix UI components
-│   ├── UploadSection.tsx
-│   ├── StudyTools.tsx
-│   ├── ChatInterface.tsx
-│   └── MindmapViewer.tsx
-├── lib/                # Utilities
-│   ├── api-key-manager.ts
-│   ├── gemini.ts
-│   ├── simple-rag.ts
-│   ├── pdf-processor.ts
-│   └── store.ts
-├── hooks/              # Custom hooks
-├── pages/              # Page components
-└── App.tsx             # Main app
+### Module Not Found
+Make sure you've installed dependencies:
+```bash
+npm run install:all
 ```
 
-## 🎯 Features in Detail
+### Environment Variables Not Loading
+- Frontend: Check `frontend/.env.local`
+- Backend: Check `backend/.env`
+- Restart the dev server after changing env vars
 
-### 📚 Document Upload
-- Upload PDFs, TXT, or Markdown files
-- Combine multiple documents
-- Automatic text extraction
-- Support for large files
+## Contributing
 
-### 🧠 Mindmap Generation
-- AI-powered concept mapping
-- Interactive visualization
-- Zoom and pan controls
-- Download as markdown
+1. Create a feature branch
+2. Make your changes
+3. Test locally
+4. Commit and push
+5. Create a pull request
 
-### 💬 Chat Interface
-- Ask questions about documents
-- Context-aware responses
-- Simple RAG for instant retrieval
-- Conversation history
+## License
 
-### 📝 Summary Generation
-- Automatic summarization
-- Structured format
-- Download as text
-- Customizable length
+MIT
 
-### 🔄 API Key Rotation
-- Automatic failover
-- Rate limit handling
-- Cooldown management
-- Load balancing
+## Support
 
-## 🚀 Performance
-
-- **Fast Inference** - Gemini 2.5 Flash optimized
-- **Instant RAG** - Keyword-based retrieval
-- **Efficient Caching** - Mindmap caching
-- **Optimized Build** - Vite + SWC
-
-## 📈 Future Enhancements
-
-- [ ] Flashcard generation
-- [ ] Spaced repetition
-- [ ] Collaborative sessions
-- [ ] Export formats
-- [ ] Advanced search
-- [ ] Progress tracking
-
-## 🤝 Contributing
-
-Contributions welcome! Please:
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Submit a pull request
-
-## 📄 License
-
-This project is part of the Mentis study companion suite.
-
-## 🆘 Support
-
-- Check documentation files
-- Review error messages
-- Check browser console
-- Verify API key configuration
-
-## 🎓 About
-
-Mentis is designed to help students:
-- Understand complex topics
-- Create study materials
-- Review documents efficiently
-- Learn interactively
-
----
-
-**Status:** ✅ Production Ready  
-**Last Updated:** November 15, 2025  
-**Version:** 1.0.0
-
-**Get Started:** [QUICK_START.md](./QUICK_START.md)
+For issues and questions, please create an issue in the repository.
