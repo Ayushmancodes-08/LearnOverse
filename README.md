@@ -49,6 +49,26 @@ Run both frontend and backend concurrently:
 npm run dev
 ```
 
+## 🚀 Deploy to Render (10 Minutes)
+
+**Quick Deploy**: See [DEPLOY_NOW.md](./DEPLOY_NOW.md) for 10-minute deployment guide
+
+**Detailed Guide**: See [RENDER_DEPLOY.md](./RENDER_DEPLOY.md) for complete instructions
+
+### Quick Deploy Steps
+
+1. Push to GitHub: `git push origin main`
+2. Go to https://render.com
+3. Click "New" → "Blueprint"
+4. Select your repo
+5. Click "Apply"
+6. Add environment variables
+7. Done! ✅
+
+Your app will be live at:
+- Frontend: `https://learnoverse-frontend.onrender.com`
+- Backend: `https://learnoverse-backend.onrender.com`
+
 Or run them separately:
 
 ```bash
