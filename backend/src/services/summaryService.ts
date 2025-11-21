@@ -23,6 +23,20 @@ const LENGTH_DESCRIPTIONS: Record<string, string> = {
   Long: '8-12 paragraphs or 1000-1500 words',
 };
 
+const FLASHCARD_OPTIMIZATION = `
+FLASHCARD OPTIMIZATION GUIDELINES:
+- Extract key facts that can become flashcard questions
+- Use clear, concise language (ideal for Q&A format)
+- Include definitions that are standalone and complete
+- Highlight important terms in bold for easy identification
+- Structure content with clear cause-effect relationships
+- Include examples that illustrate concepts
+- Use numbered lists for sequential concepts
+- Separate distinct ideas with clear breaks
+- Include formulas/equations on separate lines
+- Mark important dates, numbers, and statistics
+- Create natural question-answer pairs within the summary`;
+
 export async function generateSummary(
   documentText: string,
   style: string = 'Conceptual',
@@ -59,7 +73,7 @@ export async function generateSummary(
     console.log(`Last 200 chars: ${contentToSummarize.slice(-200)}`);
     
 
-    const systemPrompt = `You are an expert at creating clear, well-structured summaries of educational content.
+    const systemPrompt = `You are an expert at creating clear, well-structured summaries of educational content optimized for learning and flashcard generation.
 Your summaries should:
 - Capture the most important information and key takeaways
 - Be well-organized with clear sections and hierarchy
@@ -67,7 +81,12 @@ Your summaries should:
 - Highlight key concepts, definitions, and relationships
 - Be accurate and faithful to the source material
 - Include practical examples when relevant
-- Use formatting (bold, lists) to improve readability`;
+- Use formatting (bold, lists) to improve readability
+- Be structured to naturally convert into flashcard Q&A pairs
+- Extract and emphasize key facts, definitions, and relationships
+- Use clear, concise language suitable for memorization
+
+${FLASHCARD_OPTIMIZATION}`;
 
     const userPrompt = `Create a comprehensive summary of the following educational content.
 
@@ -78,11 +97,23 @@ SPECIFICATIONS:
 
 INSTRUCTIONS:
 1. Identify and summarize the main topics
-2. Explain key concepts clearly
+2. Explain key concepts clearly and concisely
 3. Show relationships between ideas
 4. Use clear formatting with headings and lists
-5. Include important definitions
+5. Include important definitions (bold key terms)
 6. Maintain accuracy to the source material
+7. Structure content to be easily convertible to flashcards
+8. Highlight important facts, dates, numbers, and statistics
+9. Use numbered lists for sequential or hierarchical concepts
+10. Create natural question-answer pairs within the summary
+
+FORMATTING GUIDELINES:
+- Use **bold** for key terms and definitions
+- Use numbered lists (1., 2., 3.) for sequential concepts
+- Use bullet points for related items
+- Separate distinct topics with clear headings
+- Include formulas/equations on separate lines
+- Mark important statistics with emphasis
 
 IMPORTANT: You MUST provide a summary. Do not ask for content or say it's missing.
 
