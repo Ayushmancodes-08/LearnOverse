@@ -31,6 +31,11 @@ app.use(express.urlencoded({ limit: '50mb', extended: true }));
 // Initialize Supabase
 initializeSupabase();
 
+// Root endpoint
+app.get('/', (req, res) => {
+  res.json({ message: 'LearnOverse API is running', version: '1.0.0' });
+});
+
 // Health check endpoint
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
