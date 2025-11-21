@@ -22,7 +22,7 @@
 - [ ] Click "New +" → "Web Service"
 - [ ] Connect GitHub repository
 - [ ] Name: `learnoverse-backend`
-- [ ] Build Command: `cd backend && npm ci && npm run build`
+- [ ] Build Command: `cd backend && npm install && npm run build`
 - [ ] Start Command: `cd backend && npm start`
 
 ### Add Environment Variables
@@ -48,7 +48,7 @@
 - [ ] Click "New +" → "Static Site"
 - [ ] Connect same GitHub repository
 - [ ] Name: `learnoverse-frontend`
-- [ ] Build Command: `cd frontend && npm ci && npm run build`
+- [ ] Build Command: `cd frontend && npm install && npm run build`
 - [ ] Publish Directory: `frontend/dist`
 
 ### Add Environment Variables

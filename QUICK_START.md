@@ -95,7 +95,7 @@ git push -u origin main
 3. **Configure**:
    ```
    Name: learnoverse-backend
-   Build Command: cd backend && npm ci && npm run build
+   Build Command: cd backend && npm install && npm run build
    Start Command: cd backend && npm start
    ```
 
@@ -132,7 +132,7 @@ git push -u origin main
 2. **Configure**:
    ```
    Name: learnoverse-frontend
-   Build Command: cd frontend && npm ci && npm run build
+   Build Command: cd frontend && npm install && npm run build
    Publish Directory: frontend/dist
    ```
 

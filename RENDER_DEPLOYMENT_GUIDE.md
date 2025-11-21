@@ -74,7 +74,7 @@ Fill in these settings:
 **Build & Deploy:**
 - **Build Command**: 
   ```
-  cd backend && npm ci && npm run build
+  cd backend && npm install && npm run build
   ```
 - **Start Command**: 
   ```
@@ -146,7 +146,7 @@ You should see:
 **Build & Deploy:**
 - **Build Command**: 
   ```
-  cd frontend && npm ci && npm run build
+  cd frontend && npm install && npm run build
   ```
 - **Publish Directory**: 
   ```
@@ -374,12 +374,12 @@ After deployment:
 ## Quick Reference
 
 ### Backend Service
-- **Build**: `cd backend && npm ci && npm run build`
+- **Build**: `cd backend && npm install && npm run build`
 - **Start**: `cd backend && npm start`
 - **Health**: `/health`
 
 ### Frontend Service
-- **Build**: `cd frontend && npm ci && npm run build`
+- **Build**: `cd frontend && npm install && npm run build`
 - **Publish**: `frontend/dist`
 
 ### Environment Variables
