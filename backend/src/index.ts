@@ -31,6 +31,11 @@ app.use(express.urlencoded({ limit: '50mb', extended: true }));
 // Initialize Supabase
 initializeSupabase();
 
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
 // API Routes
 app.use('/api/documents', documentRoutes);
 app.use('/api/chat', chatRoutes);
